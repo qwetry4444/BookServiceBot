@@ -1,8 +1,7 @@
 from aiogram import Router, F
-from aiogram.filters import Command
-from aiogram.types import Message, ReplyKeyboardRemove
+from aiogram.types import Message
 
-from keyboards.reply_keyboards import get_user_book_type_kb
+from src.bot.keyboards.reply_keyboards import get_user_book_type_kb
 
 router = Router()
 

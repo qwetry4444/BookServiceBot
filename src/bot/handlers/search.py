@@ -1,8 +1,7 @@
 from aiogram import Router, F
-from aiogram.filters import Command
 from aiogram.types import Message
 
-from keyboards.reply_keyboards import get_search_criteria_kb
+from src.bot.keyboards.reply_keyboards import get_search_criteria_kb
 
 router = Router()
 
