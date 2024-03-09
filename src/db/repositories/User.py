@@ -1,9 +1,11 @@
 """User repository file."""
 
 from sqlalchemy import select
+from sqlalchemy.exc import ProgrammingError
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import sessionmaker, selectinload
 
-from ..models import User
+from ..models.User import User
 
 
 class UserRepo:
@@ -24,8 +26,12 @@ class UserRepo:
             )
         )
 
-    # async def get_role(self, user_id: int) -> Role:
-    #     """Get user role by id."""
-    #     return await self.session.scalar(
-    #         select(User.role).where(User.user_id == user_id).limit(1)
-    #     )
+    async def get_user(self, user_id: int) -> User:
+        sql = select(User).where(User.user_id == user_id)
+        result = await self.session.execute(sql)
+        return result.scalars().one()
+
+    async def is_user_exists(self, user_id: int) -> bool:
+        sql = select(User.user_id).where(User.user_id == user_id)
+        request = (await self.session.execute(sql)).scalars().unique().one_or_none()
+        return bool(request)
