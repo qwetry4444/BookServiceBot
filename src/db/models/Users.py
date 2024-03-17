@@ -2,13 +2,15 @@ import sqlalchemy as sa
 import sqlalchemy.orm as orm
 from sqlalchemy.orm import Mapped, mapped_column
 
+from .base import Base
 
-class User:
+
+class Users(Base):
     __tablename__ = 'Users'
     user_id: Mapped[int] = mapped_column(
-        sa.BigInteger, unique=True, nullable=False
+        sa.BigInteger, unique=True, nullable=False, primary_key=True
     )
 
-    user_name: Mapped[str] = mapped_column(
+    username: Mapped[str] = mapped_column(
         sa.Text, unique=False, nullable=True
     )

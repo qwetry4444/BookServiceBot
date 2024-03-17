@@ -23,13 +23,11 @@ class RegisterCheck(BaseMiddleware):
         if event.web_app_data:
             return await handler(event, data)
         db = data['db']
-        session_maker = data['session_maker']
         user = event.from_user
 
         # Получаем менеджер сессий из ключевых аргументов, переданных в start_polling()
-        if not await db.user.is_user_exists(user_id=event.from_user.id):
-            await db.user.new(user_id=event.from_user.id,
-                                  username=event.from_user.username)
-            await data['bot'].send_message(event.from_user.id, 'Ты успешно зарегистрирован(а)!')
-
+        if not await db.user.is_user_exists(user_id=user.id):
+            await db.user.new(user_id=user.id,
+                              username=user.username)
+            await data['bot'].send_message(user.id, 'Ты успешно зарегистрирован(а)!')
         return await handler(event, data)

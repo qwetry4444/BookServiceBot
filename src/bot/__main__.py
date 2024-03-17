@@ -1,18 +1,24 @@
 import asyncio
 import logging
+from os import getenv
 
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
+from dotenv import load_dotenv
 from sqlalchemy.engine import URL  # type: ignore
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import sessionmaker
 
-from src.db.database import create_async_engine, get_session_maker
-from config_reader import config
+from src.db.database import create_async_engine, get_session_maker, Database
+# from config_reader import config
 from src.bot.middlewares.database_middleware import DatabaseMiddleware
 from src.bot.middlewares.register_check import RegisterCheck
 from src.bot.handlers import search, user_books, start
 
 
 async def main():
+    load_dotenv()
+
     dp = Dispatcher()
     dp.include_routers(
         start.router,
@@ -22,22 +28,29 @@ async def main():
     dp.message.middleware(DatabaseMiddleware())
     dp.message.middleware(RegisterCheck())
 
-    bot = Bot(config.bot_token.get_secret_value(), parse_mode=ParseMode.HTML)
+    bot = Bot(getenv("BOT_TOKEN"), parse_mode=ParseMode.HTML)
+
+    name: str = getenv("POSTGRES_DATABASE")
+    user: str = getenv("POSTGRES_USER")
+    passwd: str = getenv("POSTGRES_PASSWORD")
+    port: int = int(getenv("POSTGRES_PORT"))
+    host: str = getenv("POSTGRES_HOST")
+
+    driver: str = "asyncpg"
+    database_system: str = "postgresql"
 
     postgres_url = URL.create(
-        "postgresql+asyncpg",
-        username=config.postgres_user,
-        host=config.postgres_host,
-        database=config.postgres_db,
-        port=config.postgres_port,
-        password=config.postgres_password
-    )
+            drivername=f"{database_system}+{driver}",
+            username=user,
+            database=name,
+            password=passwd,
+            port=port,
+            host=host,
+        ).render_as_string(hide_password=False)
     print(postgres_url)
 
     async_engine = create_async_engine(postgres_url)
-    session_maker = get_session_maker(async_engine)
-
-    await dp.start_polling(bot, engine=async_engine, session_maker=session_maker)
+    await dp.start_polling(bot, engine=async_engine)
 
 
 if __name__ == '__main__':

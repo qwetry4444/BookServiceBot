@@ -13,11 +13,12 @@ class DatabaseMiddleware(BaseMiddleware):
     """This middleware throw a Database class to handler."""
 
     async def __call__(
-        self,
-        handler: Callable[[Message, dict[str, Any]], Awaitable[Any]],
-        event: Message | CallbackQuery,
-        data,
+            self,
+            handler: Callable[[Message, dict[str, Any]], Awaitable[Any]],
+            event: Message | CallbackQuery,
+            data,
     ) -> Any:
         async with AsyncSession(bind=data['engine']) as session:
-            data['db'] = Database(session)
+            db = Database(session)
+            data['db'] = db
             return await handler(event, data)

@@ -1,3 +1,3 @@
-from .User import UserRepo
+from .Users import UserRepo
 
 __all__ = ('UserRepo', )
