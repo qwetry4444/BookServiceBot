@@ -13,8 +13,8 @@ from src.db.database import create_async_engine, get_session_maker, Database
 # from config_reader import config
 from src.bot.middlewares.database_middleware import DatabaseMiddleware
 from src.bot.middlewares.register_check import RegisterCheck
-from src.bot.handlers import search, user_books, start
-
+from src.bot.handlers import set_search_type, user_books, start, search_processing
+from src.open_library_api.api import ApiHelper
 
 async def main():
     load_dotenv()
@@ -23,7 +23,8 @@ async def main():
     dp.include_routers(
         start.router,
         user_books.router,
-        search.router)
+        search_processing.router,
+        set_search_type.router,)
 
     dp.message.middleware(DatabaseMiddleware())
     dp.message.middleware(RegisterCheck())
@@ -50,7 +51,9 @@ async def main():
     print(postgres_url)
 
     async_engine = create_async_engine(postgres_url)
-    await dp.start_polling(bot, engine=async_engine)
+    api_helper = ApiHelper()
+
+    await dp.start_polling(bot, engine=async_engine, api_helper=api_helper)
 
 
 if __name__ == '__main__':
