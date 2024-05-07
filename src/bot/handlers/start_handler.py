@@ -2,7 +2,7 @@ from aiogram import Router, F
 from aiogram.filters import Command
 from aiogram.types import Message
 
-from src.bot.keyboards.reply_keyboards import get_menu_kb
+from src.bot.keyboards.reply_keyboards.reply_keyboards import get_menu_kb
 
 router = Router()
 
@@ -15,7 +15,7 @@ async def start(message: Message):
     )
 
 
-@router.message(F.text.lower() == "назад")
+@router.message(F.text.lower() == "⬅ назад")
 async def back(message: Message):
     await message.answer(
         "Меню",

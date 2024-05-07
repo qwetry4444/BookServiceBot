@@ -1,7 +1,7 @@
 from aiogram import Router, F
 from aiogram.types import Message
 
-from src.bot.keyboards.reply_keyboards import get_user_book_type_kb
+from src.bot.keyboards.reply_keyboards.reply_keyboards import get_user_book_type_kb
 
 router = Router()
 
@@ -14,7 +14,7 @@ async def answer_my(message: Message):
     )
 
 
-@router.message(F.text.lower() == "прочитанные")
+@router.message(F.text.lower() == "✅ прочитанные")
 async def answer_yes(message: Message):
     await message.answer(
         "Прочитанные вами книги:",
@@ -22,7 +22,7 @@ async def answer_yes(message: Message):
     )
 
 
-@router.message(F.text.lower() == "отложенные")
+@router.message(F.text.lower() == "📚 отложенные")
 async def answer_yes(message: Message):
     await message.answer(
         "Отложенные книги:",
