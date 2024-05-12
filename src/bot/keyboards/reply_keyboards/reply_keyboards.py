@@ -24,5 +24,6 @@ def get_search_criteria_kb() -> ReplyKeyboardMarkup:
     kb.button(text="📄 Название")
     kb.button(text="💫 Жанр")
     kb.button(text="⭐ Рейтинг")
+    kb.button(text="⬅ Назад")
     kb.adjust(1)
     return kb.as_markup(resize_keyboard=True)

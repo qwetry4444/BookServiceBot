@@ -24,7 +24,6 @@ async def search_start(message: Message, api_helper: ApiHelper, state: FSMContex
 async def search_by_key(callback: CallbackQuery, api_helper: ApiHelper, state: FSMContext):
     book = api_helper.search_book_by_key(callback.data)
     book_str = api_helper.book_to_str(book)
-    print(f"Book to STR : {book_str}")
     await callback.message.answer_photo(photo=api_helper.get_cover_url(book), caption=book_str,
                                         reply_markup=get_book_menu_kb(book))
     await state.clear()

@@ -37,6 +37,14 @@ async def search(message: Message):
 @router.message(F.text.lower() == "⭐ рейтинг")
 async def search(message: Message):
     await message.answer(
-        "Книги отсортированные по рэйтингу",
+        "Книги отсортированные по рейтингу",
+        reply_markup=get_search_criteria_kb()
+    )
+
+
+@router.message(F.text.lower() == "🔎 поиск")
+async def search_start(message: Message):
+    await message.answer(
+        "Выберите критерий поиска",
         reply_markup=get_search_criteria_kb()
     )

@@ -6,11 +6,8 @@ from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from dotenv import load_dotenv
 from sqlalchemy.engine import URL  # type: ignore
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import sessionmaker
 
 from src.db.database import create_async_engine, get_session_maker, Database
-# from config_reader import config
 from src.bot.middlewares.database_middleware import DatabaseMiddleware
 from src.bot.middlewares.register_check import RegisterCheck
 from src.bot.handlers import set_search_type_handler, user_books_handler, start_handler, search_processing_handler, about_book_handler

@@ -58,7 +58,6 @@ class ApiHelper:
     def book_to_str(book: Book):
         ol = OpenLibrary()
         author = ol.Author.get(book.authors[0]['author']['key'].split('/')[2])
-        print(f"AUTHOR{author}")
         book_str = ""
         if book.title:
             book_str += f"<b>{book.title}</b>\n\n\n"
@@ -74,14 +73,25 @@ class ApiHelper:
     @staticmethod
     def author_to_str(author: Author) -> str:
         author_str = ""
-        if author.title:
-            author_str += f"<b>{author.title}</b>\n\n"
-        elif author.name:
-            author_str += f"<b>{author.name}</b>\n\n"
-        if author.bio:
-            author_str += author.bio
+        try:
+            if author.title:
+                author_str += f"<b>{author.title}</b>\n\n"
+            elif author.name:
+                author_str += f"<b>{author.name}</b>\n\n"
+            if author.bio:
+                author_str += author.bio
 
-        return author_str
+            return author_str
+        except AttributeError:
+            try:
+                if author.name:
+                    author_str += f"<b>{author.name}</b>\n\n"
+                if author.bio:
+                    author_str += f"{'.'.join(author.bio[:500].split('.')[:-1])}."
+                return author_str
+            except AttributeError:
+                return "Не удалось найти информацию об авторе"
+
 
     @staticmethod
     def get_cover_url(book: Book) -> str:
@@ -90,23 +100,3 @@ class ApiHelper:
     @staticmethod
     def get_author_photo_url(author: Author):
         return f"https://covers.openlibrary.org/a/olid/{author.olid}-L.jpg"
-# search_query = "Тихий Дон"  # Замените это на название книги, которую вы ищете
-# search_results = search_books_by_title(search_query, get_count=5)
-
-# if search_results:
-#     print(f"Найдено {(search_results)} книг по запросу '{search_query}':")
-#     for book in search_results:
-#         print("Название книги:", book.title)
-#         print(book.authors)
-#         # print("Автор(ы):", ", ".join(book.authors))
-#         print("Издательство:", book.publisher if book.publisher else "Unknown")
-#         print("Год публикации:", book.publish_date)
-#         print("Жанр: ", book.subjects)
-#         print("---------------------------------------")
-# else:
-#     print(f"По запросу '{search_query}' книги не найдены.")
-
-# x = search_books_by_title("love123")
-# print(x)
-# for i in range(len(x)):
-#     send_book(x[i])

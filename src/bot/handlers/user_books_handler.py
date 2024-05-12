@@ -18,7 +18,6 @@ async def answer_my(message: Message):
 async def answer_yes(message: Message):
     await message.answer(
         "Прочитанные вами книги:",
-
     )
 
 
